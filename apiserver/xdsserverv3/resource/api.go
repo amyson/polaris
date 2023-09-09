@@ -49,6 +49,7 @@ type BuildOption struct {
 	TLSMode      TLSMode
 	Services     map[model.ServiceKey]*ServiceInfo
 	VersionLocal string
+	Team         string
 }
 
 func (opt *BuildOption) Clone() *BuildOption {

@@ -70,7 +70,7 @@ func (eds *EDSBuilder) makeBoundEndpoints(option *resource.BuildOption,
 
 	var clusterLoads []types.Resource
 	for svcKey, serviceInfo := range services {
-		if eds.client.IsGateway() && selfServiceKey.Equal(&svcKey) {
+		if eds.client.IsGateway() && selfServiceKey.Equal(&svcKey) || !resource.IsTeamMatchSvc(option.Team, serviceInfo) {
 			continue
 		}
 

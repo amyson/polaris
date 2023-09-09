@@ -972,3 +972,28 @@ func FormatEndpointHealth(ins *apiservice.Instance) core.HealthStatus {
 	}
 	return core.HealthStatus_UNHEALTHY
 }
+
+func IsTeamMatchSvc(nodeTeam string, svc *ServiceInfo) bool {
+	if len(svc.Instances) < 1 {
+		return false
+	}
+	instTeam := GetTeamFromService(svc)
+	if nodeTeam == "*" || instTeam == "" {
+		return true
+	}
+	return strings.Contains(nodeTeam, instTeam)
+}
+
+func GetTeamFromService(svr *ServiceInfo) string {
+	for _, instance := range svr.Instances {
+		team := GetTeamFromInstance(instance)
+		if team != "" {
+			return team
+		}
+	}
+	return ""
+}
+
+func GetTeamFromInstance(ins *apiservice.Instance) string {
+	return ins.Metadata["team"]
+}

@@ -192,6 +192,7 @@ func (x *XdsResourceGenerator) makeGatewaySnapshot(xdsNode *resource.XDSClient, 
 	opt := &resource.BuildOption{
 		TLSMode:      tlsMode,
 		VersionLocal: version,
+		Team:         xdsNode.Metadata["team"],
 	}
 	var (
 		allEndpoints []types.Resource
@@ -199,6 +200,9 @@ func (x *XdsResourceGenerator) makeGatewaySnapshot(xdsNode *resource.XDSClient, 
 		allRouters   []types.Resource
 	)
 	for namespace, services := range registryInfo {
+		if "Polaris" == namespace {
+			continue
+		}
 		opt.Services = services
 		opt.Namespace = namespace
 		// 构建 endpoints XDS 资源缓存数据，这里不需要下发网关的自己的

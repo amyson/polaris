@@ -101,7 +101,7 @@ func (cds *CDSBuilder) GenerateByDirection(option *resource.BuildOption,
 	services := option.Services
 	// 每一个 polaris service 对应一个 envoy cluster
 	for svcKey, svc := range services {
-		if ignore(svcKey) {
+		if ignore(svcKey) || !resource.IsTeamMatchSvc(option.Team, svc) {
 			continue
 		}
 		c := cds.makeCluster(svc, direction)

@@ -239,7 +239,7 @@ func (x *XDSServer) startSynTask(ctx context.Context) {
 			return
 		}
 
-		needPush := make(map[string]map[model.ServiceKey]*resource.ServiceInfo)
+		/*needPush := make(map[string]map[model.ServiceKey]*resource.ServiceInfo)
 
 		// 处理删除 ns 中最后一个 service
 		for ns, infos := range x.registryInfo {
@@ -272,7 +272,8 @@ func (x *XDSServer) startSynTask(ctx context.Context) {
 		if len(needPush) > 0 {
 			log.Info("start update xds resource snapshot ticker task", zap.Int("need-push", len(needPush)))
 			x.Generate(needPush)
-		}
+		}*/
+		x.Generate(registryInfo)
 	}
 
 	ticker := time.NewTicker(5 * cache.UpdateCacheInterval)

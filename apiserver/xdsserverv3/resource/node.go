@@ -188,7 +188,13 @@ func (PolarisNodeHash) ID(node *core.Node) string {
 		if gatewayNamespace == "" {
 			gatewayNamespace = ns
 		}
-		return strings.Join([]string{runType, gatewayNamespace, gatewayService}, "/")
+		//return strings.Join([]string{runType, gatewayNamespace, gatewayService}, "/")
+		team := node.Metadata.Fields["team"].GetStringValue()
+		if team != "" {
+			return team
+		} else {
+			return strings.Join([]string{runType, gatewayNamespace, gatewayService}, "/")
+		}
 	}
 	// 兼容老版本注入的 envoy, 默认获取 snapshot resource 粒度为 namespace 级别, 只能下发 OUTBOUND 规则
 	ret := ns
@@ -301,7 +307,8 @@ func (n *XDSClient) GetSelfNamespace() string {
 }
 
 func parseNodeProxy(node *core.Node) *XDSClient {
-	runType, polarisNamespace, _, hostIP := ParseNodeID(node.Id)
+	runType, _, _, hostIP := ParseNodeID(node.Id)
+	polarisNamespace := node.Metadata.Fields[OldGatewayNamespaceName].GetStringValue()
 	proxy := &XDSClient{
 		IPAddr:    hostIP,
 		PodIP:     hostIP,
